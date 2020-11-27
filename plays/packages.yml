@@ -1,0 +1,27 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: Install mailx package
+      package:
+        name: mailx
+        state: present
+
+- hosts: proxy 
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: Install tcpdump package
+      package:
+        name: mailx
+        state: present
+
+- hosts: database
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: Install lsof package
+      package:
+        name: lsof
+        state: present

@@ -1,0 +1,34 @@
+---
+- name: Install MySQL
+  package:
+    name: mysql
+    state: present
+
+- name: Install pymysql
+  pip:
+    name: pymysql
+    state: present
+
+- name: Setup DB Root Password
+  mysql_user:
+    login_user: root 
+    login_password: root
+    name: root
+    password: "{{ database_password }}"
+    check_implicit_admin: true
+    
+- name: Enable MySQL Service
+  service:
+    name: mysql
+    state: started
+    enabled: yes
+
+- name: Setup MySQL Configuration
+  template:
+    src: my.cnf.j2
+    dest: /root/.my.cnf
+  
+- name: Restart MySQL
+  service:
+    name: mysql
+    state: restarted

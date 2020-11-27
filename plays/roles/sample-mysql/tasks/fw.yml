@@ -1,0 +1,11 @@
+---
+- name: Install Python Firewall Library
+  pip:
+    name: firewall
+    state: present
+
+- name: Allow Incoming Traffic to MySQL
+  firewalld:
+    port: 3306/tcp
+    permanent: yes
+    state: enabled

@@ -1,0 +1,23 @@
+---
+- name: Create a new primary partition with a size of 800MB on nvme1n1
+  parted:
+    device: /dev/nvme1n1
+    number: 1
+    state: present
+    part_end: 800MB
+
+- name: Create a volume group on top of /dev/nvme1n1p1
+  lvg:
+    vg: vg_database
+    pvs: /dev/nvme1n1p1
+
+- name: Create a logical volume
+  lvol:
+    vg: vg_database
+    lv: lv_mysql
+    size: '512'
+
+- name: Create a xfs filesystem on lv_mysql
+  filesystem:
+    fstype: xfs
+    dev: /dev/vg_database/lv_mysql

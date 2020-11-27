@@ -1,0 +1,34 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: no
+  vars_files:
+    - /home/automation/plays/user_list.yml
+    - /home/automation/plays/secret.yml
+  tasks:
+    - name: Create users on Webservers
+      user:
+        name: "{{ item.username }}"
+        uid: "{{ item.uid }}"
+        password: "{{ user_password | password_hash('sha512') }}"
+        groups: wheel
+        append: yes
+        shell: /bin/bash
+        state: present
+      when: "'webservers' in group_names and item.uid|string|first == '1'"
+      with_items:
+          - "{{ users }}"
+
+
+    - name: Create users on database hosts
+      user:
+        name: "{{ item.username }}"
+        uid: "{{ item.uid }}"
+        password: "{{ user_password | password_hash('sha512') }}"
+        groups: wheel
+        append: yes
+        shell: /bin/bash
+        state: present
+      when: "'database' in group_names and item.uid|string|first == '2'"
+      with_items:
+          - "{{ users }}"
