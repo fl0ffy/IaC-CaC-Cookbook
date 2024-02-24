@@ -1,0 +1,5 @@
+---
+# tasks file for sample-mysql
+- import_tasks: lvm.yml
+- import_tasks: fw.yml
+- import_tasks: install.yml

@@ -1,0 +1,28 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: Configure SSHD Banner
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "^#Banner"
+        line: Banner /etc/motd
+        state: present
+    - name: Configure SSHD X11Forwarding
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "^X11Forwarding yes"
+        line: "X11Forwarding no"
+        state: present
+    - name: Configure SSHD MaxAuthTries
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "^#MaxAuthTries"
+        line: "MaxAuthTries 3"
+        state: present
+    - name: Reload SSHD deamon
+      service:
+        name: sshd
+        state: reloaded
+

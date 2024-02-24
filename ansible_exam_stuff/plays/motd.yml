@@ -1,0 +1,28 @@
+---
+- hosts: proxy
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: Setup motd for proxy hosts
+      lineinfile:
+        path: /etc/motd
+        line: "Welcome to HAProxy server"
+
+- hosts: webservers
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: Setup motd for webserver hosts
+      lineinfile:
+        path: /etc/motd
+        line: "Welcome to Apache server"
+
+- hosts: database
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: Setup motd for database hosts
+      lineinfile:
+        path: /etc/motd
+        line: "Welcome to MySQL server"
+

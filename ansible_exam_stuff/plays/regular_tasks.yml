@@ -1,0 +1,11 @@
+---
+- hosts: proxy
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: Create cron jobs
+      cron:
+        name: "job to log time"
+        minute: "0"
+        job: "date >> /var/log/time.log"
+        state: present

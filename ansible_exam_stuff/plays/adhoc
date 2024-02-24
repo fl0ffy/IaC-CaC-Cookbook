@@ -1,0 +1,14 @@
+#!/bin/bash
+
+inventory=/home/automation/plays/inventory
+user=automation
+
+
+ansible all -i $inventory -b -m user -a "name=$user state=present"
+
+ansible all -i $inventory -b -m file -a "path=/home/$user/.ssh/ state=directory"
+
+ansible all -i $inventory -m copy -a "src=/home/$user/.ssh/id_rsa.pub dest=/home/$user/.ssh/authorized_keys owner=$user group=$user"
+
+ansible all -i $inventory -b -m lineinfile -a 'dest=/etc/sudoers regexp="^root"  line="automation      ALL=(ALL)       NOPASSWD:ALL" state=present'
+
