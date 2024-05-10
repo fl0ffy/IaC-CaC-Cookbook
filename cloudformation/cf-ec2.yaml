@@ -25,8 +25,8 @@ Resources:
       # UserData: !Base64 |
       #   #!/bin/bash -ex
       #   # put your script here
-      # Tags:
-      #   - Key: key
-      #     Value: value
+      Tags:
+        - Key: Name
+          Value: cf-ec2
 
 # Outputs:
