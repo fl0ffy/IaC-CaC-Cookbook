@@ -1,0 +1,21 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Setup EC2 keypair
+# Metadata: 
+
+Parameters: 
+  KeyPairName:
+    Description: Name for keypair
+    Type: String
+    Default: tacos-for-all
+
+# Mappings: 
+
+# Conditions: 
+
+Resources: 
+  myKeyPair:
+    Type: AWS::EC2::KeyPair
+    Properties:
+      KeyName: !Ref KeyPairName
+
+# Outputs:
