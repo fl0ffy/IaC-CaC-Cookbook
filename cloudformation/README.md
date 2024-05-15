@@ -18,6 +18,7 @@ aws cloudformation update-stack --stack-name simpleEC2 --template-body file://cf
 aws cloudformation delete-stack --stack-name simpleEC2
 ```
 
+<br><br>
 ---
 ### For acloudguru AWS playground setup
 
@@ -52,6 +53,7 @@ aws cloudformation create-stack --stack-name ssh-sg --template-body file://secur
 aws cloudformation create-stack --stack-name harbor --template-body file://harbor-ec2-cf.yaml --profile playground --parameters ParameterKey=myKeyPair,ParameterValue=default-keypair ParameterKey=myImageId,ParameterValue=${AMI} ParameterKey=mySecurityGroupIds,ParameterValue="'${SG-01},${SG-02}'" ParameterKey=mySubnetId,ParameterValue=${SUBNET-ID}
 ```
 
+<br><br>
 ---
 ### Resources
 
