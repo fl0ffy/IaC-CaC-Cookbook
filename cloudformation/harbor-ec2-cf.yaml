@@ -27,7 +27,7 @@ Resources:
     Properties:
       # AvailabilityZone: !Ref myAvailabilityZone
       ImageId: !Ref myImageId
-      InstanceType: t3.micro
+      InstanceType: t3.micro~
       KeyName: !Ref myKeyPair
       SecurityGroupIds: !Ref mySecurityGroupIds
       SubnetId: !Ref mySubnetId
@@ -57,13 +57,15 @@ Resources:
           docker-compose version
 
           # Install harbor
-          wget https://github.com/goharbor/harbor/releases/download/v2.7.3/harbor-online-installer-v2.7.3.tgz
-          tar xzvf harbor-online-installer-v2.7.3.tgz
+          wget https://github.com/goharbor/harbor/releases/download/v2.10.0/harbor-online-installer-v2.10.0.tgz
+          tar xzvf harbor-online-installer-v2.10.0.tgz
 
           cd harbor
           cp harbor.yml.tmpl harbor.yml
+          # set hostname 
+          # comment https or setup certs 
 
-          # ./install.sh
+          ./install.sh
 
 
     Metadata:
