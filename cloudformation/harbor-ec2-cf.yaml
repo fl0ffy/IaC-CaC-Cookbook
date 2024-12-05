@@ -1,0 +1,77 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Setup Harbor Registry on EC2
+
+# Metadata: 
+
+Parameters: 
+  myKeyPair: 
+    Description: Key pair for instance
+    Type: "AWS::EC2::KeyPair::KeyName"
+  myImageId:
+    Description: AMI ID for instance
+    Type: "AWS::EC2::Image::Id"
+  mySecurityGroupIds:
+    Description: Security groups for instance
+    Type: "List<AWS::EC2::SecurityGroup::Id>"
+  mySubnetId:
+    Description: Subnets IDs
+    Type: "AWS::EC2::Subnet::Id"
+
+# Mappings: 
+
+# Conditions: 
+
+Resources:
+  harborEC2:
+    Type: AWS::EC2::Instance
+    Properties:
+      # AvailabilityZone: !Ref myAvailabilityZone
+      ImageId: !Ref myImageId
+      InstanceType: t3.micro~
+      KeyName: !Ref myKeyPair
+      SecurityGroupIds: !Ref mySecurityGroupIds
+      SubnetId: !Ref mySubnetId
+      Tags:
+        - Key: Name
+          Value: Harbor
+      UserData: !Base64 |
+          #!/bin/bash -x
+          # Install the files and packages from the metadata
+          #/opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource harborEC2 --region ${AWS::Region}
+          
+          # Signal the status from cfn-init
+          #/opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource harborEC2 --region ${AWS::Region}
+
+          # Install docker
+          yum update
+          yum install -y  docker
+          usermod -a -G docker ec2-user
+
+          systemctl enable docker.service
+          systemctl start docker.service
+
+          # Install Docker compose plugin
+          wget https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) 
+          mv docker-compose-$(uname -s)-$(uname -m) /usr/local/bin/docker-compose
+          chmod -v +x /usr/local/bin/docker-compose
+          docker-compose version
+
+          # Install harbor
+          wget https://github.com/goharbor/harbor/releases/download/v2.10.0/harbor-online-installer-v2.10.0.tgz
+          tar xzvf harbor-online-installer-v2.10.0.tgz
+
+          cd harbor
+          cp harbor.yml.tmpl harbor.yml
+          # set hostname 
+          # comment https or setup certs 
+
+          ./install.sh
+
+
+    Metadata:
+      AWS::CloudFormation::Init:
+        config:
+          packages:
+            yum:
+              docker: []
+
